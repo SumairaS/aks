@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   ACR_NAME: mytestACRRegistry2
   IMAGE_NAME: simple-python-app
