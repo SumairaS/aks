@@ -1,0 +1,40 @@
+name: Build and Deploy to AKS
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  ACR_NAME: mytestACRRegistry2
+  IMAGE_NAME: simple-python-app
+  AKS_RESOURCE_GROUP: rg-sumaira-practice
+  AKS_CLUSTER_NAME: AKS-test-github-actions
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Login to Azure CLI
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Build and push Docker image
+      run: |
+        az acr login --name $ACR_NAME
+        docker build -t $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }} .
+        docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
+
+    - name: Get AKS credentials
+      run: |
+        az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
+
+    - name: Deploy to AKS
+      run: |
+        kubectl set image deployment/simple-python-app simple-python-app=$ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
+        kubectl rollout status deployment/simple-python-app
