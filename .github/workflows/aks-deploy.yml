@@ -13,7 +13,7 @@ env:
 
 jobs:
   build-and-deploy:
-    runs-on: runner-2  # Your self-hosted runner label
+    runs-on: linux  # Your self-hosted runner label
 
     steps:
     - uses: actions/checkout@v3
