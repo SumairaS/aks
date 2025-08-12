@@ -37,13 +37,17 @@ jobs:
         docker build -t $LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }} .
         docker push $LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }}
 
+    - name: Azure Login with Personal Account
+      run: |
+        az login --service-principal \
+          -u "${{ secrets.AZURE_USERNAME }}" \
+          -p "${{ secrets.AZURE_PASSWORD }}" \
+          --tenant "${{ secrets.AZURE_TENANT_ID }}"
+        az account set --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+
+
     # 3. Get AKS Credentials (needs Azure CLI login or kubeconfig)
-    - name: Azure Login (CLI)
-      uses: azure/login@v1
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
 
     - name: Get AKS credentials
       run: |
