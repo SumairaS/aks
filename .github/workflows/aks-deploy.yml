@@ -14,7 +14,7 @@ env:
   IMAGE_NAME: simple-python-app
   AKS_RESOURCE_GROUP: rg-sumaira-practice
   AKS_CLUSTER_NAME: AKS-test-github-actions
-  LOGIN_SERVER: ${{ env.ACR_NAME }}.azurecr.io
+  LOGIN_SERVER: mytestACRRegistry2.azurecr.io
 
 jobs:
   build-and-deploy:
