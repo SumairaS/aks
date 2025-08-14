@@ -38,8 +38,8 @@ jobs:
     # 2. Build and Push Docker Image
     - name: Build and push Docker image
       run: |
-        docker build -t $LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }} .
-        docker push $LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }}
+        docker build -t ${{ env.LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
+        docker push ${{ env.LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
     - name: Azure Login with Personal Account
       run: |
