@@ -10,11 +10,11 @@ permissions:
   contents: read
 
 env:
-  ACR_NAME: mytestACRRegistry2
+  ACR_NAME: acrtestingaks
   IMAGE_NAME: simple-python-app
   AKS_RESOURCE_GROUP: rg-sumaira-practice
   AKS_CLUSTER_NAME: AKS-test-github-actions
-  LOGIN_SERVER: mytestACRRegistry2.azurecr.io
+  LOGIN_SERVER: acrtestingaks.azurecr.io
 
 jobs:
   build-and-deploy:
