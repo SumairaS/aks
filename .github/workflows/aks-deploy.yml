@@ -44,10 +44,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Login to Azure CLI using Managed Identity
-        run: |
-          az login --identity
-          az account show
+      - name: Azure login using Managed Identity
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.MANAGED_IDENTITY_CLIENT_ID }}
+
+      # - name: Login to Azure CLI using Managed Identity
+      #   run: |
+      #     az login --identity
+      #     az account show
 
       - name: Login to ACR
         run: |
