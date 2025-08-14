@@ -20,59 +20,23 @@ jobs:
   build-and-deploy:
     runs-on: linux
 
-     
-             # - uses: actions/checkout@v3
-             # - name: Azure ACR Login
-             #   run: |
-             #     az login --identity
-             #     az acr login --name ${{ env.ACR_NAME }}
-
     steps:
     # 1. Login to ACR using Access Keys
     - name: ACR Login
       uses: azure/docker-login@v2
-       with:
-         login-server: ${{ env.LOGIN_SERVER }}
-         username: ${{ secrets.ACR_USERNAME }}
-         password: ${{ secrets.ACR_PASSWORD }}
-
-    # # 2. Build and Push Docker Image
-    # - name: Build and push Docker image
-    #   run: |
-    #     docker build -t ${{ env.LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
-    #     docker push ${{ env.LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-    # steps:
-    #   - name: Checkout repo
-    #     uses: actions/checkout@v3
-
-    #   - name: Azure login using Managed Identity
-    #     uses: azure/login@v1
-    #     with:
-    #       auth-type: IDENTITY
-    #       client-id: ${{ secrets.MANAGED_IDENTITY_CLIENT_ID }}  # user-assigned identity client ID
-    #       subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}  # subscription where identity has roles
-    #       enable-AzPSSession: false
-
-
-
-      # - name: Login to Azure CLI using Managed Identity
-      #   run: |
-      #     az login --identity
-      #     az account show
-
-      - name: Login to ACR
-        run: |
-          az acr login --name acrtestingaks
-
-      - name: Build Docker image
-        run: |
-          docker build -t acrtestingaks.azurecr.io/simple-python-app:${{ github.sha }} .
-
-      - name: Push Docker image to ACR
-        run: |
-          docker push acrtestingaks.azurecr.io/simple-python-app:${{ github.sha }}
-      - name: Azure Login with Personal Account
-        run: |
+      with:
+        login-server: ${{ env.LOGIN_SERVER }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+      
+    # 2. Build and Push Docker Image
+    - name: Build and push Docker image
+      run: |
+        docker build -t ${{ env.LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
+        docker push ${{ env.LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+    
+    - name: Azure Login with Personal Account
+      run: |
           az login --identity
           az account set --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
 
@@ -80,16 +44,15 @@ jobs:
     # 3. Get AKS Credentials (needs Azure CLI login or kubeconfig)
 
 
-      - name: Get AKS credentials
-        run: |
+    - name: Get AKS credentials
+      run: |
           az aks get-credentials \
             --resource-group $AKS_RESOURCE_GROUP \
             --name $AKS_CLUSTER_NAME \
             --overwrite-existing
 
     # 4. Deploy to AKS
-      - name: Deploy to AKS
-        run: |
+    - name: Deploy to AKS
+      run: |
           kubectl set image deployment/simple-python-app simple-python-app=$LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }}
           kubectl rollout status deployment/simple-python-app
-
