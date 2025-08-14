@@ -22,14 +22,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Azure ACR Login
+      run: |
+        az login --identity
+        az acr login --name ${{ env.ACR_NAME }}
 
     # 1. Login to ACR using Access Keys
-    - name: ACR Login
-      uses: azure/docker-login@v2
-      with:
-        login-server: ${{ env.LOGIN_SERVER }}
-        username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
+ #   - name: ACR Login
+ #     uses: azure/docker-login@v2
+      # with:
+      #   login-server: ${{ env.LOGIN_SERVER }}
+      #   username: ${{ secrets.ACR_USERNAME }}
+      #   password: ${{ secrets.ACR_PASSWORD }}
 
     # 2. Build and Push Docker Image
     - name: Build and push Docker image
@@ -39,10 +43,7 @@ jobs:
 
     - name: Azure Login with Personal Account
       run: |
-        az login --service-principal \
-          -u "${{ secrets.AZURE_USERNAME }}" \
-          -p "${{ secrets.AZURE_PASSWORD }}" \
-          --tenant "${{ secrets.AZURE_TENANT_ID }}"
+        az login --identity
         az account set --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
 
 
