@@ -47,8 +47,10 @@ jobs:
       - name: Azure login using Managed Identity
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.MANAGED_IDENTITY_CLIENT_ID }}
-          auth-type: managedidentity
+          client-id: ${{ secrets.MANAGED_IDENTITY_CLIENT_ID }}  # client ID of your user-assigned identity
+          auth-type: IDENTITY
+          enable-AzPSSession: false
+
 
       # - name: Login to Azure CLI using Managed Identity
       #   run: |
