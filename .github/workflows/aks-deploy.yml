@@ -47,6 +47,10 @@ jobs:
             --resource-group $AKS_RESOURCE_GROUP \
             --name $AKS_CLUSTER_NAME \
             --overwrite-existing
+            
+    - name: Debug - list all files
+      run: ls -R
+    
     # 4. Deploy to AKS
     - name: Deploy to AKS
       run: |
