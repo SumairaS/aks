@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: simple-python-app
-        image: mytestACRRegistry2.azurecr.io/simple-python-app:v1
+        image: acrtestingaks.azurecr.io/simple-python-app:v1
         ports:
         - containerPort: 5000
         resources:
