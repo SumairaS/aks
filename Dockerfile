@@ -1,4 +1,4 @@
-# Use official Python runtime image
+# Use official Python runtime image for testing
 FROM python:3.11-slim
 
 # Set working directory
