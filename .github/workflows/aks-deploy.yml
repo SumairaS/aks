@@ -51,7 +51,7 @@ jobs:
     - name: Debug - list all files
       run: ls -R
     
-    # 4. Deploy to AKS
+    # 4. Deploy  to AKS
     - name: Deploy to AKS
       run: |
           kubectl apply -f deployment.yaml
